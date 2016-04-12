@@ -25,10 +25,6 @@ import (
 		"k8s.io/kubernetes/pkg/client/unversioned"
 	*/)
 
-type k8sClient struct {
-	*http.Client
-}
-
 var awsRegion = flag.String("region", "us-east-1", "AWS region")
 var addr = flag.String("apiserver", "", "k8s server ip address (https://192.168.1.1)")
 var user = flag.String("username", "", "apiserver username")
@@ -73,22 +69,6 @@ func k8sClientFactory() *k8sClient {
 
 */
 
-func k8sClientFactory() *k8sClient {
-	if len(*addr) > 0 && len(*user) > 0 && len(*pword) > 0 {
-		/*
-			config := http.Client{
-				Host:     *addr,
-				Username: *user,
-				Password: *pword,
-				Insecure: true,
-			}
-		*/
-		//		return &k8sClient{unversioned.NewOrDie(&config)}
-		return &k8sClient{}
-	}
-	return nil
-}
-
 func main() {
 	flag.Parse()
 	fmt.Println("Hello, world.")
@@ -105,7 +85,7 @@ func main() {
 	}
 	fmt.Printf("output: %s\n", out)
 
-	c := client.NewClientOrDie("https://dev.dstcorp.io:8443", "", "")
+	c := client.NewClientOrDie()
 
 	resp, err := c.Get("/api/v1/namespaces/mch-dev0/pods")
 	if err != nil {

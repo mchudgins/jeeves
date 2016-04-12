@@ -9,14 +9,16 @@ curl -ik -H 'authorization: Bearer ****'  https://dev.dstcorp.io:8443/api/v1/nam
 
 */
 
-
 import (
 	"flag"
 	"fmt"
 	"html"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os/exec"
+
+	"github.com/mchudgins/jeeves/pkg/client"
 
 	/*	"k8s.io/kubernetes/pkg/api"
 		"k8s.io/kubernetes/pkg/client/restclient"
@@ -73,13 +75,18 @@ func k8sClientFactory() *k8sClient {
 
 func k8sClientFactory() *k8sClient {
 	if len(*addr) > 0 && len(*user) > 0 && len(*pword) > 0 {
-		config := restclient.Config{
-			Host:     *addr,
-			Username: *user,
-			Password: *pword,
-			Insecure: true,
-		}
-		return &k8sClient{unversioned.NewOrDie(&config)}
+		/*
+			config := http.Client{
+				Host:     *addr,
+				Username: *user,
+				Password: *pword,
+				Insecure: true,
+			}
+		*/
+		//		return &k8sClient{unversioned.NewOrDie(&config)}
+		return &k8sClient{}
+	}
+	return nil
 }
 
 func main() {
@@ -98,8 +105,19 @@ func main() {
 	}
 	fmt.Printf("output: %s\n", out)
 
-	client := k8sClientFactory()
+	c := client.NewClientOrDie("https://dev.dstcorp.io:8443", "", "")
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	resp, err := c.Get("/api/v1/namespaces/mch-dev0/pods")
+	if err != nil {
+		log.Fatalf("Error on GET request for %s: %v\n", c.Host, err)
+		return
+	}
+	defer resp.Body.Close()
+	log.Printf("resp:  %v\n", resp)
+	body, err := ioutil.ReadAll(resp.Body)
+	log.Printf("body:  %s\n", body)
+
+	//	client := k8sClientFactory()
+
+	//	log.Fatal(http.ListenAndServe(":8080", nil))
 }
-

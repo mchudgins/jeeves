@@ -130,13 +130,48 @@ func loadKubeConfig() *k8sConfig {
 	return &k8sConfig
 }
 
+/*
+func k8sClientFactory() *k8sClient {
+	log.Printf("Host:  %v; UserName: %v; Password: %v\n", *addr, *user, *pword)
+	if len(*addr) > 0 && len(*user) > 0 && len(*pword) > 0 {
+		config := restclient.Config{
+			Host:     *addr,
+			Username: *user,
+			Password: *pword,
+			Insecure: true,
+		}
+		return &k8sClient{unversioned.NewOrDie(&config)}
+	} else {
+		kubernetesService := os.Getenv("KUBERNETES_SERVICE_HOST")
+		if kubernetesService == "" {
+			glog.Fatalf("Please specify the Kubernetes server with --server")
+		}
+		apiServer := fmt.Sprintf("https://%s:%s", kubernetesService, os.Getenv("KUBERNETES_SERVICE_PORT"))
+
+		token, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/token")
+		if err != nil {
+			glog.Fatalf("No service account token found")
+		}
+
+		config := restclient.Config{
+			Host:        apiServer,
+			BearerToken: string(token),
+			Insecure:    true,
+		}
+
+		c, err := unversioned.New(&config)
+		if err != nil {
+			glog.Fatalf("Failed to make client: %v", err)
+		}
+		return &k8sClient{c}
+	}
+}
+*/
+
 func NewClientOrDie() *Client {
 	k8sConfig := loadKubeConfig()
-	log.Printf("currentContext:  %s\n", k8sConfig.CurrentContext)
 	ctx, _ := k8sConfig.ActiveContext()
-	log.Printf("CurrentContext: %v\n", ctx)
 	cluster, _ := k8sConfig.FindCluster(ctx.Context.Cluster)
-	log.Printf("Server:  %s", cluster.Details.Server)
 	user, _ := k8sConfig.FindUser(ctx.Context.User)
 
 	tr := &http.Transport{
@@ -157,6 +192,7 @@ func (c *Client) Get(url string) (resp *http.Response, err error) {
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Set("Accept-Encoding", "gzip,deflate")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.Token))
 	return c.Do(req)

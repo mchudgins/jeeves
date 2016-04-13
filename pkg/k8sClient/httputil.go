@@ -195,5 +195,12 @@ func (c *Client) Get(url string) (resp *http.Response, err error) {
 	req.Header.Set("Accept-Encoding", "gzip,deflate")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.Token))
-	return c.Do(req)
+
+	resp, err = c.Do(req)
+
+	if resp.StatusCode == 401 {
+		log.Fatal("Unauthorized (are your login credentials current?)")
+	}
+
+	return resp, err
 }

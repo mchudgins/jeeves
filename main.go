@@ -27,6 +27,7 @@ var awsRegion = flag.String("region", "us-east-1", "AWS region")
 var addr = flag.String("apiserver", "", "k8s server ip address (https://192.168.1.1)")
 var user = flag.String("username", "", "apiserver username")
 var pword = flag.String("password", "", "apiserver password")
+var port = flag.String("port", ":8080", "http port")
 
 func main() {
 	flag.Parse()
@@ -84,7 +85,5 @@ func main() {
 	}
 	log.Printf("pod:  %v\n", *pod)
 
-	//	client := k8sClientFactory()
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(*port, nil))
 }

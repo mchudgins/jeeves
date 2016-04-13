@@ -18,7 +18,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/mchudgins/jeeves/pkg/client"
+	"github.com/mchudgins/jeeves/pkg/k8sClient"
 )
 
 var awsRegion = flag.String("region", "us-east-1", "AWS region")

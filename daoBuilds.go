@@ -31,7 +31,7 @@ type BuildRecord struct {
 
 type BuildCounterRecord struct {
 	BuildRecordKey
-	Count int
+	CurrentCount int
 }
 
 var svc = dynamodb.New(session.New(&aws.Config{Region: awsRegion}))
@@ -48,11 +48,11 @@ func formatBuildKey(namespace string, build string, number int) string {
 	return namespace + "/" + build + "/" + strconv.Itoa(number)
 }
 
+// use DynamoDB's "atomic counter" "feature" to get the next build number
+// for each namespace/buildName pair
 func (dao *DaoBuilds) incrementBuildCounter(build string) (int, error) {
-	o := &BuildCounterRecord{
-		BuildRecordKey: BuildRecordKey{
-			Build: build,
-		},
+	o := &BuildRecordKey{
+		Build: build,
 	}
 
 	item, err := dynamodbattribute.MarshalMap(o)
@@ -61,31 +61,33 @@ func (dao *DaoBuilds) incrementBuildCounter(build string) (int, error) {
 		return 0, err
 	}
 
-	atomic_update := &struct {
-		IncrementValue int
-	}{IncrementValue: 1}
-	av, err := dynamodbattribute.MarshalMap(atomic_update)
 	if err != nil {
 		log.Fatal(err)
 		return 0, err
 	}
+
 	params := &dynamodb.UpdateItemInput{
-		TableName:                 aws.String("jeeves.dev.buildCounters"),
-		Key:                       item,
-		UpdateExpression:          aws.String("SET Count = Count + :incrementValue"),
-		ExpressionAttributeValues: av,
+		TableName:        aws.String("jeeves.dev.buildCounters"),
+		Key:              item,
+		UpdateExpression: aws.String("ADD CurrentCount :incrementValue"),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":incrementValue": {
+				N: aws.String("1"),
+			},
+		},
+		ReturnValues: aws.String("ALL_NEW"),
 	}
 
 	resp, err := dao.svc.UpdateItem(params)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("updating %v encountered: %v", *params, err)
 		return 0, err
 	}
 
 	out := &BuildCounterRecord{}
 	err = dynamodbattribute.UnmarshalMap(resp.Attributes, out)
 
-	return out.Count, err
+	return out.CurrentCount, err
 }
 
 func (dao *DaoBuilds) Persist(obj *Build) error {

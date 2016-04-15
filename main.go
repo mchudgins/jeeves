@@ -13,12 +13,10 @@ import (
 	"flag"
 	"fmt"
 	"html"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
-	"strings"
 
 	"github.com/mchudgins/jeeves/pkg/k8sClient"
 )
@@ -38,23 +36,7 @@ func main() {
 		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
 	})
 
-	http.HandleFunc("/builds", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("processing htp request: %v\n", *r)
-
-		switch strings.ToUpper(r.Method) {
-		case "POST":
-			body, err := ioutil.ReadAll(r.Body)
-			if err != nil {
-				log.Fatal(err)
-
-			}
-			defer r.Body.Close()
-
-			log.Printf("read: %s\n\n", body)
-		default:
-			fmt.Fprintf(w, "%s : %q", r.Method, html.EscapeString(r.URL.Path))
-		}
-	})
+	http.HandleFunc("/builds", BuildHandler)
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Ah, my health is just fine.  thanks.")

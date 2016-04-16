@@ -31,8 +31,6 @@ func init() {
 
 func launchBuildPod(imageName string, buildName string, body []byte) (string, error) {
 
-	log.Printf("build data: %s", body)
-
 	evt := githubBuildRequest{}
 
 	err := json.Unmarshal(body, &evt)
@@ -44,7 +42,7 @@ func launchBuildPod(imageName string, buildName string, body []byte) (string, er
 	return "", nil
 }
 
-func getBuildInfo(k8sClient *client.Client,
+func getBuildInfo(k8sClient *k8sClient.Client,
 	dao *DaoBuilds,
 	imageName string,
 	buildName string,
@@ -61,7 +59,7 @@ func getBuildInfo(k8sClient *client.Client,
 	return "", nil
 }
 
-func NewBuildHandler(k8sClient *client.Client, dao *DaoBuilds) http.HandlerFunc {
+func NewBuildHandler(k8sClient *k8sClient.Client, dao *DaoBuilds) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("processing http request: %v\n", *r)
 

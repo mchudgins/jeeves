@@ -1,8 +1,11 @@
-package client
+package k8sClient
 
 import (
+	"bytes"
+	"compress/gzip"
 	"crypto/tls"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -189,13 +192,39 @@ func NewClientOrDie() *Client {
 }
 
 func (c *Client) Get(url string) (resp *http.Response, err error) {
-	log.Printf("Get'ting:  %s\n", c.Host+url)
+	log.Printf("GET'ting:  %s\n", c.Host+url)
 	req, err := http.NewRequest("GET", c.Host+url, nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Accept-Encoding", "gzip,deflate")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, sdch")
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.Token))
+
+	resp, err = c.Do(req)
+
+	if resp.StatusCode == 401 {
+		log.Fatal("Unauthorized (are your login credentials current?)")
+	}
+
+	return resp, err
+}
+
+func (c *Client) Post(url string, body []byte) (resp *http.Response, err error) {
+	log.Printf("POST'ting:  %s\n", c.Host+url)
+	var reader io.Reader
+	reader, err = gzip.NewReader(bytes.NewReader(body))
+	if err != nil {
+		reader = bytes.NewReader(body)
+	}
+
+	req, err := http.NewRequest("POST", c.Host+url, reader)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept-Encoding", "gzip, deflate, sdch")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Encoding", "gzip")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.Token))
 
 	resp, err = c.Do(req)

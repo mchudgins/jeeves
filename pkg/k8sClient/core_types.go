@@ -1,10 +1,11 @@
-package client
+package k8sClient
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 
 	"github.com/technosophos/kubelite/v1"
 )
@@ -49,4 +50,25 @@ func (c *Client) Pod(namespace string, podName string) (*v1.Pod, error) {
 	}
 
 	return &pod, nil
+}
+
+func (c *Client) LaunchPod(namespace string, pod *v1.Pod) (*http.Response, error) {
+	pod.APIVersion = "v1"
+	pod.Kind = "Pod"
+
+	body, err := json.Marshal(pod)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("launching %v in namespace %s.", pod, namespace)
+	resp, err := c.Post("/api/v1/namespaces/"+namespace+"/pods", body)
+	defer resp.Body.Close()
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("body: %s", respBody)
+
+	return resp, err
 }

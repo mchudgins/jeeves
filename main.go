@@ -31,7 +31,7 @@ func main() {
 	flag.Parse()
 	fmt.Println("Hello, world.")
 
-	c := client.NewClientOrDie()
+	c := k8sClient.NewClientOrDie()
 	dao, err := NewDaoBuilds()
 	if err != nil {
 		log.Fatal(err)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html"
 	"io/ioutil"
@@ -13,6 +14,15 @@ import (
 	"github.com/mchudgins/jeeves/pkg/k8sClient"
 )
 
+type githubRepository struct {
+	CloneURL string `json:"clone_url"`
+}
+type githubBuildRequest struct {
+	Ref             string           `json:"ref"`
+	Repo            githubRepository `json:"repository"`
+	GithubPushEvent string           `json:"githubPushEvent"`
+}
+
 var buildRegex *regexp.Regexp
 
 func init() {
@@ -20,6 +30,16 @@ func init() {
 }
 
 func launchBuildPod(imageName string, buildName string, body []byte) (string, error) {
+
+	log.Printf("build data: %s", body)
+
+	evt := githubBuildRequest{}
+
+	err := json.Unmarshal(body, &evt)
+	if err != nil {
+		log.Fatalf("unable to Unmarshal %s: %v", body, err)
+		return "", err
+	}
 
 	return "", nil
 }

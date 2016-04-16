@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"log"
 	"net/http"
@@ -66,7 +67,7 @@ func TestPost(t *testing.T) {
 		expect int
 	}{
 		{url: "/builds/golang:latest", body: "", expect: 404},
-		{url: "/builds/golang:latest/fubar", body: "", expect: 400},
+		{url: "/builds/golang:latest/fubar", body: "@test_resources/push_event.json", expect: 400},
 		{url: "/builds/golang:latest/fubar", body: "{ 'gitURL' : 'this'}", expect: 200},
 		{url: "/builds/golang:latest/fubar/gorf", body: "", expect: 400},
 		{url: "/builds/golang:latest/fubar?gorf", body: "", expect: 400},
@@ -85,7 +86,24 @@ func TestPost(t *testing.T) {
 	for _, c := range cases {
 		var reader io.Reader
 		if len(c.body) > 0 {
-			reader = strings.NewReader(c.body)
+			if c.body[0] == '@' {
+				file, err := os.Open(c.body[1:])
+				if err != nil {
+					t.Fatalf("Unable to open file %s!", c.body[1:])
+				}
+				defer file.Close()
+
+				stat, _ := file.Stat()
+				data := make([]byte, stat.Size(), stat.Size())
+				_, err = file.Read(data)
+				if err != nil {
+					t.Fatalf("unable to read %s: %v", c.body[1:], err)
+				}
+
+				reader = bytes.NewReader(data)
+			} else {
+				reader = strings.NewReader(c.body)
+			}
 		}
 
 		req, err := http.NewRequest("POST", "http://localhost"+c.url, reader)

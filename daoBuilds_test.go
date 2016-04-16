@@ -1,12 +1,16 @@
 package main
 
-import "testing"
+import (
+	"log"
+	"testing"
+)
 
 func TestCreate(t *testing.T) {
 	cases := []struct {
 		in     Build
 		expect string
 	}{
+		{in: Build{Build: "fubar", Namespace: "gorf", Number: 1}, expect: "first"},
 		{in: Build{Build: "first", Namespace: "gorf", Number: 5}, expect: "first"},
 		{in: Build{Build: "second", Namespace: "gorf", Number: 5}, expect: "first"},
 		{in: Build{Build: "third", Namespace: "gorf", Number: 5}, expect: "first"},
@@ -51,5 +55,22 @@ func TestFetch(t *testing.T) {
 		if obj.Build != c.expect {
 			t.Errorf("expected %s but got %s", c.expect, obj.Build)
 		}
+	}
+}
+
+func TestFetchByNamespace(t *testing.T) {
+	dao, err := NewDaoBuilds()
+	if err != nil {
+		t.Errorf("unable to construct DaoBuild struct: %v", err)
+	}
+
+	builds, err := dao.FetchAllByNamespace("gorf")
+	if err != nil {
+		log.Fatal(err)
+		t.Fail()
+	}
+
+	for _, b := range builds {
+		log.Printf("build: %v", b)
 	}
 }

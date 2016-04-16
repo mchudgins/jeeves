@@ -152,9 +152,15 @@ func (dao *DaoBuilds) Fetch(namespace string, buildName string, number int) (*Bu
 		return nil, err
 	}
 
+	if len(resp.Item) == 0 {
+		return nil, NewErrorCode(404, fmt.Errorf("object with key %s/%s/%d not found", namespace, buildName, number))
+	}
+
 	out := &BuildRecord{}
 	err = dynamodbattribute.UnmarshalMap(resp.Item, out)
-
+	if err != nil {
+		log.Fatal(err)
+	}
 	updated, err := time.Parse(time.RFC3339Nano, out.LastUpdated)
 	if err != nil {
 		updated = time.Time{}
@@ -167,4 +173,49 @@ func (dao *DaoBuilds) Fetch(namespace string, buildName string, number int) (*Bu
 		LastUpdated: updated,
 	}
 	return result, nil
+}
+
+func (dao *DaoBuilds) FetchAllByNamespace(namespace string) ([]*Build, error) {
+	log.Printf("FetchAllByNamespace")
+
+	params := &dynamodb.QueryInput{
+		TableName: aws.String("jeeves.dev.builds"),
+		IndexName: aws.String("Namespace-Name-index"),
+		KeyConditions: map[string]*dynamodb.Condition{
+			"Namespace": {ComparisonOperator: aws.String("EQ"),
+				AttributeValueList: []*dynamodb.AttributeValue{
+					{S: aws.String(namespace)},
+				},
+			},
+		},
+	}
+
+	results, err := dao.svc.Query(params)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	builds := make([]*Build, len(results.Items), len(results.Items))
+	for i, item := range results.Items {
+		out := &BuildRecord{}
+		err = dynamodbattribute.UnmarshalMap(item, out)
+		if err != nil {
+			log.Fatal(err)
+			return nil, err
+		}
+
+		updated, err := time.Parse(time.RFC3339Nano, out.LastUpdated)
+		if err != nil {
+			updated = time.Time{}
+		}
+
+		builds[i] = &Build{
+			Build:       out.Name,
+			Namespace:   out.Namespace,
+			Number:      out.Number,
+			LastUpdated: updated,
+		}
+	}
+
+	return builds, err
 }

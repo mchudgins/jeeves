@@ -13,9 +13,10 @@ import (
 
 type Client struct {
 	*http.Client
-	Host     string
-	Username string
-	Token    string
+	Host             string
+	Username         string
+	Token            string
+	CurrentNamespace string
 }
 
 type k8sClusterDetails struct {
@@ -179,10 +180,11 @@ func NewClientOrDie() *Client {
 	}
 
 	return &Client{
-		Client:   &http.Client{Transport: tr},
-		Host:     cluster.Details.Server,
-		Username: ctx.Context.User,
-		Token:    user.User.Token,
+		Client:           &http.Client{Transport: tr},
+		Host:             cluster.Details.Server,
+		Username:         ctx.Context.User,
+		Token:            user.User.Token,
+		CurrentNamespace: ctx.Context.Namespace,
 	}
 }
 

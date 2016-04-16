@@ -31,12 +31,19 @@ func main() {
 	flag.Parse()
 	fmt.Println("Hello, world.")
 
+	c := client.NewClientOrDie()
+	dao, err := NewDaoBuilds()
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("processing htp request: %v\n", *r)
 		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
 	})
 
-	http.HandleFunc("/builds", BuildHandler)
+	http.HandleFunc("/builds", NewBuildHandler(c, dao))
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Ah, my health is just fine.  thanks.")
@@ -48,8 +55,6 @@ func main() {
 		return
 	}
 	fmt.Printf("output: %s\n", out)
-
-	c := client.NewClientOrDie()
 
 	pods, err := c.PodList("mch-dev0")
 	if err != nil {

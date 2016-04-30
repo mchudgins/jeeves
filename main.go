@@ -19,6 +19,7 @@ import (
 	"os/exec"
 
 	"github.com/mchudgins/jeeves/pkg/k8sClient"
+	stdprometheus "github.com/prometheus/client_golang/prometheus"
 )
 
 var awsRegion = flag.String("region", "us-east-1", "AWS region")
@@ -29,7 +30,6 @@ var port = flag.String("port", ":8080", "http port")
 
 func main() {
 	flag.Parse()
-	fmt.Println("Hello, world.")
 
 	c := k8sClient.NewClientOrDie()
 	dao, err := NewDaoBuilds()
@@ -37,6 +37,9 @@ func main() {
 		log.Fatal(err)
 		os.Exit(1)
 	}
+
+	http.Handle("/metrics",
+		stdprometheus.Handler())
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("processing htp request: %v\n", *r)
@@ -56,21 +59,23 @@ func main() {
 	}
 	fmt.Printf("output: %s\n", out)
 
-	pods, err := c.PodList("mch-dev0")
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
-	for _, p := range pods.Items {
-		log.Printf("%s: %s %v\n\n", p.Name, p.Status, p)
-	}
+	/*
+		pods, err := c.PodList("mch-dev0")
+		if err != nil {
+			log.Fatal(err)
+			os.Exit(1)
+		}
+		for _, p := range pods.Items {
+			log.Printf("%s: %s %v\n\n", p.Name, p.Status, p)
+		}
 
-	pod, err := c.Pod("mch-dev0", "jumpbox")
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
-	log.Printf("pod:  %v\n", *pod)
+		pod, err := c.Pod("mch-dev0", "jumpbox")
+		if err != nil {
+			log.Fatal(err)
+			os.Exit(1)
+		}
+		log.Printf("pod:  %v\n", *pod)
+	*/
 
 	log.Fatal(http.ListenAndServe(*port, nil))
 }

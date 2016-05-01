@@ -19,10 +19,10 @@ import (
 	"os/exec"
 
 	"github.com/mchudgins/jeeves/pkg/k8sClient"
+	"github.com/mchudgins/jeeves/pkg/service"
 	stdprometheus "github.com/prometheus/client_golang/prometheus"
 )
 
-var awsRegion = flag.String("region", "us-east-1", "AWS region")
 var addr = flag.String("apiserver", "", "k8s server ip address (https://192.168.1.1)")
 var user = flag.String("username", "", "apiserver username")
 var pword = flag.String("password", "", "apiserver password")
@@ -32,7 +32,7 @@ func main() {
 	flag.Parse()
 
 	c := k8sClient.NewClientOrDie()
-	dao, err := NewDaoBuilds()
+	dao, err := service.NewDaoBuilds()
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)

@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/mchudgins/jeeves/pkg/k8sClient"
+	"github.com/mchudgins/jeeves/pkg/service"
 )
 
 type githubRepository struct {
@@ -43,7 +44,7 @@ func launchBuildPod(imageName string, buildName string, body []byte) (string, er
 }
 
 func getBuildInfo(k8sClient *k8sClient.Client,
-	dao *DaoBuilds,
+	dao *service.DaoBuilds,
 	imageName string,
 	buildName string,
 	buildNum int) (string, error) {
@@ -59,7 +60,7 @@ func getBuildInfo(k8sClient *k8sClient.Client,
 	return "", nil
 }
 
-func NewBuildHandler(k8sClient *k8sClient.Client, dao *DaoBuilds) http.HandlerFunc {
+func NewBuildHandler(k8sClient *k8sClient.Client, dao *service.DaoBuilds) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("processing http request: %v\n", *r)
 

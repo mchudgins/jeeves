@@ -1,6 +1,7 @@
-package main
+package service
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"strconv"
@@ -34,6 +35,7 @@ type BuildCounterRecord struct {
 	CurrentCount int
 }
 
+var awsRegion = flag.String("region", "us-east-1", "AWS region")
 var svc = dynamodb.New(session.New(&aws.Config{Region: awsRegion}))
 
 // NewDaoBuilds are used to perform CRUD operations on Builds

@@ -4,6 +4,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
 	http "github.com/mchudgins/jeeves/pkg/transport"
+	"golang.org/x/net/context"
 )
 
 /*
@@ -21,3 +22,20 @@ var (
 		{nil, http.DecodeEmptyRequest, http.EncodeResponse, nil},
 	}
 )
+
+func CreateServer(e EndpointItem) (*httptransport.Server, error) {
+
+	ctx := context.Background()
+
+	handler := httptransport.NewServer(
+		ctx,
+		//		endpoint.Chain(endpointInstrumentation(&counters, "createCertificate"),
+		//			endpointLog("createCertificate"))(makeCreateCertificateEndpoint(svc)),
+		e.e,
+		e.decoder,
+		e.encoder,
+		e.options...,
+	)
+
+	return handler, nil
+}

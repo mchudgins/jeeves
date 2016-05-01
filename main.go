@@ -52,6 +52,8 @@ func main() {
 		fmt.Fprintf(w, "Ah, my health is just fine.  thanks.")
 	})
 
+	CreateHttpEndpoints()
+
 	out, err := exec.Command("go", "version").Output()
 	if err != nil {
 		log.Fatal(err)

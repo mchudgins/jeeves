@@ -1,9 +1,12 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
-	http "github.com/mchudgins/jeeves/pkg/transport"
+	"github.com/mchudgins/jeeves/pkg/service"
+	"github.com/mchudgins/jeeves/pkg/transport"
 	"golang.org/x/net/context"
 )
 
@@ -11,6 +14,7 @@ import (
   EndpointItem defines the API URL
 */
 type EndpointItem struct {
+	url     string
 	e       endpoint.Endpoint
 	decoder httptransport.DecodeRequestFunc
 	encoder httptransport.EncodeResponseFunc
@@ -18,12 +22,13 @@ type EndpointItem struct {
 }
 
 var (
-	apis = []EndpointItem{
-		{nil, http.DecodeEmptyRequest, http.EncodeResponse, nil},
+	build = service.Build{}
+	apis  = []EndpointItem{
+		{"/test", transport.MakeLaunchBuildEndpoint(build), transport.DecodeBuildRequest, transport.EncodeResponse, nil},
 	}
 )
 
-func CreateServer(e EndpointItem) (*httptransport.Server, error) {
+func createServer(e EndpointItem) *httptransport.Server {
 
 	ctx := context.Background()
 
@@ -37,5 +42,11 @@ func CreateServer(e EndpointItem) (*httptransport.Server, error) {
 		e.options...,
 	)
 
-	return handler, nil
+	return handler
+}
+
+func CreateHttpEndpoints() {
+	for _, e := range apis {
+		http.Handle(e.url, createServer(e))
+	}
 }

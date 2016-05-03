@@ -1,10 +1,15 @@
 
 .PHONY: all build restore
 
-all: build
+all: container
+
+container: build
+	godep go test
+	godep go test ./pkg/...
+
 
 build: restore
-	#CGO_ENABLED=0 godep go build -a -ldflags '-s' (can't use this 'cause we have a non-portable ref to 'user')
+	##CGO_ENABLED=0 godep go build -a -ldflags '-s' (can't use this 'cause we have a non-portable ref to 'user')
 	godep go build
 	cp jeeves docker
 

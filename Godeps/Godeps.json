@@ -1,0 +1,213 @@
+{
+	"ImportPath": "github.com/mchudgins/jeeves",
+	"GoVersion": "go1.5",
+	"GodepVersion": "v62",
+	"Deps": [
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/awserr",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/awsutil",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/client",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/client/metadata",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/corehandlers",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/credentials",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/defaults",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/ec2metadata",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/request",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/aws/session",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/private/endpoints",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/private/protocol",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/private/protocol/json/jsonutil",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/private/protocol/jsonrpc",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/private/protocol/rest",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/private/signer/v4",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/private/waiter",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/service/dynamodb",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute",
+			"Comment": "v1.1.18-7-gc877804",
+			"Rev": "c87780456c05445f38e7096b12a4c7b73d3c8d0c"
+		},
+		{
+			"ImportPath": "github.com/beorn7/perks/quantile",
+			"Rev": "3ac7bf7a47d159a033b107610db8a1b6575507a4"
+		},
+		{
+			"ImportPath": "github.com/cloudfoundry-incubator/candiedyaml",
+			"Rev": "5cef21e2e4f0fd147973b558d4db7395176bcd95"
+		},
+		{
+			"ImportPath": "github.com/ghodss/yaml",
+			"Rev": "1a6f069841556a7bcaff4a397ca6e8328d266c2f"
+		},
+		{
+			"ImportPath": "github.com/go-ini/ini",
+			"Comment": "v1.11.0",
+			"Rev": "12f418cc7edc5a618a51407b7ac1f1f512139df3"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/endpoint",
+			"Rev": "ec8b02591ee873433565a1ae9d317353412d1d27"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/log",
+			"Rev": "ec8b02591ee873433565a1ae9d317353412d1d27"
+		},
+		{
+			"ImportPath": "github.com/go-kit/kit/transport/http",
+			"Rev": "ec8b02591ee873433565a1ae9d317353412d1d27"
+		},
+		{
+			"ImportPath": "github.com/golang/protobuf/proto",
+			"Rev": "dda510ac0fd43b39770f22ac6260eb91d377bce3"
+		},
+		{
+			"ImportPath": "github.com/jmespath/go-jmespath",
+			"Comment": "0.2.2-12-g0b12d6b",
+			"Rev": "0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74"
+		},
+		{
+			"ImportPath": "github.com/matttproud/golang_protobuf_extensions/pbutil",
+			"Rev": "d0c3fe89de86839aecf2e0579c40ba3bb336a453"
+		},
+		{
+			"ImportPath": "github.com/prometheus/client_golang/prometheus",
+			"Comment": "0.7.0-74-g90c15b5",
+			"Rev": "90c15b5efa0dc32a7d259234e02ac9a99e6d3b82"
+		},
+		{
+			"ImportPath": "github.com/prometheus/client_model/go",
+			"Comment": "model-0.0.2-12-gfa8ad6f",
+			"Rev": "fa8ad6fec33561be4280a8f0514318c79d7f6cb6"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/expfmt",
+			"Rev": "40456948a47496dc22168e6af39297a2f8fbf38c"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg",
+			"Rev": "40456948a47496dc22168e6af39297a2f8fbf38c"
+		},
+		{
+			"ImportPath": "github.com/prometheus/common/model",
+			"Rev": "40456948a47496dc22168e6af39297a2f8fbf38c"
+		},
+		{
+			"ImportPath": "github.com/prometheus/procfs",
+			"Rev": "b71f1520e06fd169804f5c7fa20217caf169ae30"
+		},
+		{
+			"ImportPath": "github.com/technosophos/kubelite/resource",
+			"Rev": "9634d51557f46903c59abd0059165bdb4753774f"
+		},
+		{
+			"ImportPath": "github.com/technosophos/kubelite/types",
+			"Rev": "9634d51557f46903c59abd0059165bdb4753774f"
+		},
+		{
+			"ImportPath": "github.com/technosophos/kubelite/unversioned",
+			"Rev": "9634d51557f46903c59abd0059165bdb4753774f"
+		},
+		{
+			"ImportPath": "github.com/technosophos/kubelite/v1",
+			"Rev": "9634d51557f46903c59abd0059165bdb4753774f"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "e45385e9b226f570b1f086bf287b25d3d4117776"
+		},
+		{
+			"ImportPath": "gopkg.in/logfmt.v0",
+			"Rev": "c50dc9aa845e681529d8e49d3dc11ec0195aacac"
+		},
+		{
+			"ImportPath": "gopkg.in/stack.v1",
+			"Comment": "v1.4.0",
+			"Rev": "0585967eab0016c8e4e2d55ac20585b469574cec"
+		},
+		{
+			"ImportPath": "speter.net/go/exp/math/dec/inf",
+			"Rev": "42ca6cd68aa922bc3f32f1e056e61b65945d9ad7"
+		}
+	]
+}

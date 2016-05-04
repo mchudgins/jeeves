@@ -32,7 +32,7 @@ func (svc Build) LaunchBuild(ctx context.Context, build BuildInfo) (string, erro
 // other packages.
 type key int
 
-// userIPkey is the context key for the user IP address.  Its value of zero is
+// correlationIDKey is the context key for X-Correlation-ID.  Its value of zero is
 // arbitrary.  If this package defined other context keys, they would have
 // different integer values.
 const correlationIDKey key = 0

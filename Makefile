@@ -15,6 +15,15 @@ build: restore
 	godep go build
 	cp jeeves docker
 
+more_cool_tests:
+	go test -bench-. -cpu=1,4,16 -benchmem
+
+escape_analysis:
+	go test -gcflags=-m -bench=something
+	# see https://golang.org/pkg/net/http/pprof/
+	go tool pprof http://localhost:9090/debug/pprof/profile
+	go tool pprof http://localhost:9090/debug/pprof/heap
+
 deploy:
 	go test -tags=integration
 
